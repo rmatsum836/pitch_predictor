@@ -69,8 +69,11 @@ def calc_movement(p_o, v_o, a):
     pxo = p_o[0]
     pyo = p_o[1]
     pzo = p_o[2]
-
-    length_list = len(list(vxo))
+    
+    if isinstance(vxo,int) or isinstance(vxo,float):
+        pass
+    else:
+        length_list = len(list(vxo))
     #y_start = [40] * length_list
     y_start = 40 # Need to figure out why this is
     t_start = (-vyo - np.sqrt(vyo**2-2*ay*(pyo-y_start))) / ay
@@ -92,7 +95,8 @@ def calc_movement(p_o, v_o, a):
     # Compute magnus force components
     amag_x = _calc_magnus(a[0], adrag, v_x, v_bar)
     amag_y = _calc_magnus(a[1], adrag, v_y, v_bar)
-    amag_z = _calc_magnus(a[2], adrag, v_z, v_bar)
+    #amag_z = _calc_magnus(a[2], adrag, v_z, v_bar)
+    amag_z = az + adrag * v_z / v_bar + 32.179
 
     mov_x = _calc_move(amag_x, time)
     mov_z = _calc_move(amag_z, time)
