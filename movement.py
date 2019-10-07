@@ -4,9 +4,9 @@ def _calc_v_start(v, a, t_start, coord):
     """
     calculate velocities at start
     """
-    if coord = 'x':
+    if coord == 'x':
         i = 0
-    elif coord = 'y':
+    elif coord == 'y':
         i = 1
     else:
         i = 2
@@ -38,7 +38,7 @@ def _calc_move(amag_i, time):
     return d_i
 
 
-def calc_movement(p_o, v_o, a)::
+def calc_movement(p_o, v_o, a):
     """
     Function that computes the movement of a given pitch that is corrected for drag
 
@@ -60,22 +60,34 @@ def calc_movement(p_o, v_o, a)::
 
     """
     # Compute velocities at start
+    vxo = v_o[0]
+    vyo = v_o[1]
+    vzo = v_o[2]
+    ax = a[0]
+    ay = a[1]
+    az = a[2]
+    pxo = p_o[0]
+    pyo = p_o[1]
+    pzo = p_o[2]
+
+    length_list = len(list(vxo))
+    #y_start = [40] * length_list
     y_start = 40 # Need to figure out why this is
-    t_start = (-v_o[1] - np.sqrt(v_o**2-2*a[1]*(p_o[1]-y_start))) / a[1]
-    v_xstart = _calc_v_start(v_o, a_0, t_start, 'x')
-    v_ystart = _calc_v_start(v_o, a_0, t_start, 'y')
-    v_zstart = _calc_v_start(v_o, a_0, t_start, 'z')
-    time = (-v_ystart - np.sqrt(v_y_start**2-2*a[1]*(y_start-(17/12)))) / a[1]
+    t_start = (-vyo - np.sqrt(vyo**2-2*ay*(pyo-y_start))) / ay
+    v_xstart = _calc_v_start(v_o, a, t_start, 'x')
+    v_ystart = _calc_v_start(v_o, a, t_start, 'y')
+    v_zstart = _calc_v_start(v_o, a, t_start, 'z')
+    time = (-v_ystart - np.sqrt(v_ystart**2-2*ay*(y_start-(17/12)))) / ay
 
     # Calculate the mean velocity components
-    v_x = _calc_vbar(v_xstart, a[0], time)
-    v_y = _calc_vbar(v_ystart, a[1], time)
-    v_z = _calc_vbar(v_zstart, a[2], time)
+    v_x = _calc_vbar(v_xstart, ax, time)
+    v_y = _calc_vbar(v_ystart, ay, time)
+    v_z = _calc_vbar(v_zstart, az, time)
 
     v_bar = np.sqrt(v_x**2+v_y**2+v_z**2)
 
     # Calculate drag acceleration
-    adrag = np.abs(a[0]*v_x+a[1]*v_y+(a[2]+32.179)*v_z) / v_bar
+    adrag = np.abs(ax*v_x+ay*v_y+(az+32.179)*v_z) / v_bar
 
     # Compute magnus force components
     amag_x = _calc_magnus(a[0], adrag, v_x, v_bar)
@@ -83,8 +95,8 @@ def calc_movement(p_o, v_o, a)::
     amag_z = _calc_magnus(a[2], adrag, v_z, v_bar)
 
     mov_x = _calc_move(amag_x, time)
-    mov_z = calc_move(amag_z, time)
+    mov_z = _calc_move(amag_z, time)
 
     dzg = mov_z - 12 * 0.5 * 32.179 * time**2
 
-    return [mov_x, mov_y, dzg]
+    return [mov_x, mov_z, dzg]
