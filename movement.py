@@ -40,7 +40,9 @@ def _calc_move(amag_i, time):
 
 def calc_movement(p_o, v_o, a)::
     """
-    Function that computes the movement of a given pitch
+    Function that computes the movement of a given pitch that is corrected for drag
+
+    Taken from: http://baseball.physics.illinois.edu/Movement.pdf
 
     Parameters
     ----------
@@ -81,7 +83,8 @@ def calc_movement(p_o, v_o, a)::
     amag_z = _calc_magnus(a[2], adrag, v_z, v_bar)
 
     mov_x = _calc_move(amag_x, time)
-    mov_y = _calc_move(amag_y, time)
     mov_z = calc_move(amag_z, time)
 
-    return [mov_x, mov_y, mov_z]
+    dzg = mov_z - 12 * 0.5 * 32.179 * time**2
+
+    return [mov_x, mov_y, dzg]
