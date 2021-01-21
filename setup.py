@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(name='pitch_predictor',
         version='0.0',
@@ -7,5 +7,5 @@ setup(name='pitch_predictor',
         author='Ray Matsumoto',
         author_email='raymatsum@gmail.com',
         license='MIT',
-        packages=['pitch_predictor'],
+        packages=find_packages(),
         zip_safe=False)
